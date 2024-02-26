@@ -1,7 +1,7 @@
 $(document).ready(()=>{
     $("#post-button-id").click(function (e){
         e.preventDefault();
-        const today = new Date();
+           const today = new Date();
         const options = { month: 'short', day: 'numeric'};
         const formattedDate = today.toLocaleDateString('en-US', options);
         const tweetText = $("#textarea-tweet").val();
@@ -22,6 +22,8 @@ $(document).ready(()=>{
 
     function addTweetToFeed(tweet){
         const tweetContent = tweet.content.replace(/(#\w+)/g, '<span class="fill-blue">$1</span>').replace(/(@\w+)/g, '<span class="fill-blue">$1</span>');
+        const imgs = tweet.img;
+        
         const newTweetDate = `<div class="row p-b-1rem border-bottom" id="repost-tweets">
         <div class="col tweet-form-col-1 px-3 py-3">
             <div class="profile-user" style="background-image: url(../Twitter/images/name.png);"></div>
@@ -48,6 +50,10 @@ $(document).ready(()=>{
                 <div class="contents py-1 p-null">
                     <span class="f-15 f-weight-400">${tweetContent}</span>
                 </div>
+                <div>
+                     <div class="imagePreview" style="width:500px;height:600px;"></div>
+                </div>
+                
             </div>
             <!-- -------------------- -->
             <div class="row">
@@ -77,9 +83,26 @@ $(document).ready(()=>{
         </div>
     </div>`;
     $("#tweets-col").prepend(newTweetDate);
-
+        var lsType = $("#finput");
+        readURL(lsType[0]);
+         $('#finput').val('');
     }
     });
+
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $($('.imagePreview')[0]).css('background-image', 'url('+e.target.result +')');
+            
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+    else {
+         $($('.imagePreview')[0]).css("width", 0);
+        $($('.imagePreview')[0]).css("height", 0);
+    }
+}
 
     $("#tweets-col").on("click", "#like-button", function(){
         const likeCountEle = $(this).siblings("#like-count");
